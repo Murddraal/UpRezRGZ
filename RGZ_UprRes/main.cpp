@@ -152,7 +152,11 @@ DWORD WINAPI ThreadFunc(void*)
 
 		sprintf_s(str, "Выполнил студент группы ПМИ-31 Савицкий Ю.Р.\n");
 		sprintf_s(info, "Тип клавиатуры: %s\n", KeyboarType);
-		sprintf_s(info_1, "Размер страницы буфера ассоциативной трансляции команд: %d", Cache);
+		if(Cache!=1)
+		sprintf_s(info_1, "Ассоциативность КЭШа третьего уровня: %d", Cache);
+		else
+			sprintf_s(info_1, "Ассоциативность КЭШа третьего уровня определить нельзя");
+
 		FreeLibrary(hLib);
 		return 0;
 	}

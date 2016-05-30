@@ -1,10 +1,31 @@
-﻿  dll.cpp
-dll.cpp(6): warning C4190: для "GetInformation" задана С-компоновка, но возвращаемый тип UDT "std::basic_string<char,std::char_traits<char>,std::allocator<char>>" несовместим с языком Си
-dll.cpp(90): warning C4101: Byte: неиспользованная локальная переменная
-dll.cpp(94): warning C4101: bias: неиспользованная локальная переменная
-dll.cpp(93): warning C4101: IsValid: неиспользованная локальная переменная
-     Создается библиотека C:\git\UpRezRGZ\Release\lib_DLL.lib и объект C:\git\UpRezRGZ\Release\lib_DLL.exp
-  Создание кода
-  All 79 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
-  Создание кода завершено
-  lib_DLL.vcxproj -> C:\git\UpRezRGZ\Release\lib_DLL.dll
+﻿Сборка начата 30.05.2016 20:49:41.
+     1>Проект "D:\git\UpRezRGZ\lib_DLL\lib_DLL.vcxproj" в узле 3 (целевые объекты Rebuild).
+     1>ClCompile:
+         D:\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D LIB_DLL_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Release\\" /Fd"Release\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt dll.cpp
+         dll.cpp
+     1>dll.cpp(6): warning C4190: для "GetInformation" задана С-компоновка, но возвращаемый тип UDT "std::basic_string<char,std::char_traits<char>,std::allocator<char>>" несовместим с языком Си
+     1>dll.cpp(103): warning C4554: &: проверьте порядок применения операторов на наличие ошибки; для четкого задания порядка используйте скобки
+     1>dll.cpp(105): warning C4554: &: проверьте порядок применения операторов на наличие ошибки; для четкого задания порядка используйте скобки
+     1>dll.cpp(107): warning C4554: &: проверьте порядок применения операторов на наличие ошибки; для четкого задания порядка используйте скобки
+     1>dll.cpp(109): warning C4554: &: проверьте порядок применения операторов на наличие ошибки; для четкого задания порядка используйте скобки
+     1>dll.cpp(111): warning C4554: &: проверьте порядок применения операторов на наличие ошибки; для четкого задания порядка используйте скобки
+     1>dll.cpp(113): warning C4554: &: проверьте порядок применения операторов на наличие ошибки; для четкого задания порядка используйте скобки
+     1>dll.cpp(115): warning C4554: &: проверьте порядок применения операторов на наличие ошибки; для четкого задания порядка используйте скобки
+     1>dll.cpp(117): warning C4554: &: проверьте порядок применения операторов на наличие ошибки; для четкого задания порядка используйте скобки
+     1>dll.cpp(119): warning C4554: &: проверьте порядок применения операторов на наличие ошибки; для четкого задания порядка используйте скобки
+     1>dll.cpp(121): warning C4554: &: проверьте порядок применения операторов на наличие ошибки; для четкого задания порядка используйте скобки
+     1>dll.cpp(123): warning C4554: &: проверьте порядок применения операторов на наличие ошибки; для четкого задания порядка используйте скобки
+     1>dll.cpp(90): warning C4101: CPUBrandString: неиспользованная локальная переменная
+     1>dll.cpp(129): warning C4101: cache_type_string: неиспользованная локальная переменная
+       Link:
+         D:\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\git\UpRezRGZ\Release\lib_DLL.dll" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"D:\git\UpRezRGZ\Release\lib_DLL.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG:incremental /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\git\UpRezRGZ\Release\lib_DLL.lib" /MACHINE:X86 /SAFESEH /DLL Release\dll.obj
+            Создается библиотека D:\git\UpRezRGZ\Release\lib_DLL.lib и объект D:\git\UpRezRGZ\Release\lib_DLL.exp
+         Создание кода
+         All 74 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+         Создание кода завершено
+         lib_DLL.vcxproj -> D:\git\UpRezRGZ\Release\lib_DLL.dll
+     1>Сборка проекта "D:\git\UpRezRGZ\lib_DLL\lib_DLL.vcxproj" завершена (целевые объекты Rebuild).
+
+Сборка успешно завершена.
+
+Затраченное время: 00:00:01.00

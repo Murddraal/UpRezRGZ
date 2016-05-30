@@ -33,13 +33,14 @@ extern "C" _declspec(dllexport) string GetInformation()
 
 	return type;
 }
-void GetCpuid(int CPUInfo[4], int InfoType)
+void GetCpuid(int CPUInfo[4], int InfoType, int CacheNumb)
 {
 	int IEAX, IEBX, IECX, IEDX;
+	if(CacheNumb>=0)
 	_asm
 	{
 		MOV EAX, InfoType //установка функции команды CPUID
-		MOV ECX, 3
+		MOV ECX, CacheNumb
 			CPUID	//вызов инструкции процессора
 			//полученные в регистрах процессора 
 			//результаты CPUID копируются
@@ -48,7 +49,35 @@ void GetCpuid(int CPUInfo[4], int InfoType)
 			MOV IECX, ECX
 			MOV IEDX, EDX
 	}
+	else
+		if(CacheNumb==-2)
+	_asm
+	{
+		MOV EDX, InfoType //установка функции команды CPUID
+			CPUID	//вызов инструкции процессора
+					//полученные в регистрах процессора 
+					//результаты CPUID копируются
+			MOV IEAX, EAX
+			MOV IEBX, EBX
+			MOV IECX, ECX
+			MOV IEDX, EDX
+	}	
+		else
+		{
+			_asm
+			{
+				MOV EAX, InfoType //установка функции команды CPUID
+				CPUID	//вызов инструкции процессора
+						//полученные в регистрах процессора 
+						//результаты CPUID копируются
+					MOV IEAX, EAX
+					MOV IEBX, EBX
+					MOV IECX, ECX
+					MOV IEDX, EDX
+			}
+		}
 	//запись в переданный в функцию массив значений
+
 	CPUInfo[0] = IEAX;
 	CPUInfo[1] = IEBX;
 	CPUInfo[2] = IECX;
@@ -59,57 +88,53 @@ extern "C" _declspec(dllexport) int GetCache()
 {
 	int CPUInfo[4]; // регистры EAX, EBX, ECX, EDX
 	char CPUBrandString[48];//имя процессора
-	string Cache = "";
 	// идентификационная информация о процессоре
 	//(имя процессора - строка до 48 символов длиной)
-	GetCpuid(CPUInfo, 0x80000002);
-	memcpy(CPUBrandString, CPUInfo, sizeof(CPUInfo));
-	GetCpuid(CPUInfo, 0x80000003);
-	memcpy(CPUBrandString + 16, CPUInfo, sizeof(CPUInfo));
-	GetCpuid(CPUInfo, 0x80000004);
-	memcpy(CPUBrandString + 32, CPUInfo, sizeof(CPUInfo));
 
-	unsigned int cache_ways_of_associativity;
-	if (strstr(CPUBrandString, "AMD"))//если AMD
+	
+	unsigned int cache_ways_of_associativity=0;
+	int cache_level;
+	int CacheIndex;
+
+	GetCpuid(CPUInfo, 0x00000000, -1);
+	if (CPUInfo[2]== 0x444D4163)//если AMD
 	{
-		unsigned int ByteEAX, ByteEBX;
-		//0x80000005-содержит информацию о TLB 
-		GetCpuid(CPUInfo, 0x80000005);
-		//получаем 1 байты регистров EAX и EBX
-		//в них содержится информация о TLB команд
-		ByteEAX = CPUInfo[0] & 0x000000FF;
-		ByteEBX = CPUInfo[1] & 0x000000FF;
-		//если в данных регистрах, 1й байт не 00h(Reserved), то
-		//TLB имеет следующий размер
-		if (ByteEAX != 0x00) Cache += "2 - MB and 4 - MB pages. +";
-		if (ByteEBX != 0x00) Cache += "4 KB pages.\n";
+		GetCpuid(CPUInfo, 0x80000006, -2);
+		if (CPUInfo[3] & 0x0000000F == 0x0)
+			cache_ways_of_associativity=0;
+		if (CPUInfo[3] & 0x0000000F == 0x2)
+			cache_ways_of_associativity = 2;
+		if (CPUInfo[3] & 0x0000000F == 0x4)
+			cache_ways_of_associativity = 4;
+		if (CPUInfo[3] & 0x0000000F == 0x6)
+			cache_ways_of_associativity = 8;
+		if (CPUInfo[3] & 0x0000000F == 0x8)
+			cache_ways_of_associativity = 16;
+		if (CPUInfo[3] & 0x0000000F == 0xA)
+			cache_ways_of_associativity = 32;
+		if (CPUInfo[3] & 0x0000000F == 0xB)
+			cache_ways_of_associativity = 48;
+		if (CPUInfo[3] & 0x0000000F == 0xC)
+			cache_ways_of_associativity = 64;
+		if (CPUInfo[3] & 0x0000000F == 0xD)
+			cache_ways_of_associativity = 96;
+		if (CPUInfo[3] & 0x0000000F == 0xE)
+			cache_ways_of_associativity = 128;
+		if (CPUInfo[3] & 0x0000000F == 0xF)
+			cache_ways_of_associativity = -1;
 
 	}
 	else//если Intel
 	{
-		unsigned int Byte;
-		//0x02-содержит информацию о Cache 
-		GetCpuid(CPUInfo, 0x04);
-		int IsValid;
-		unsigned int bias;//сдвиг
-		
-		int cache_type = CPUInfo[0] & 0x1F;
-
 		char * cache_type_string;
-		switch (cache_type) {
-		case 1: cache_type_string = "Кэш данных"; break;
-		case 2: cache_type_string = "Кэш инструкций"; break;
-		case 3: cache_type_string = "Универсальный кэш"; break;
-		default: cache_type_string = "Неопределен"; break;
-		}
+		CacheIndex = 0;
+		do
+		{
+			GetCpuid(CPUInfo, 0x04, CacheIndex++);
+			cache_level = (CPUInfo[0] >> 5)&0x7;
+		} while ((cache_level!=3)&& ((CPUInfo[0] & 0xf0) != 0));
 
-		int cache_level = (CPUInfo[0] >>= 5) & 0x7;
-		int cache_is_self_initializing = (CPUInfo[0] >>= 3) & 0x1;
-		int cache_is_fully_associative = (CPUInfo[0] >>= 1) & 0x1;
-		unsigned int cache_sets = CPUInfo[2] + 1;
-		unsigned int cache_coherency_line_size = (CPUInfo[1] & 0xFFF) + 1;
-		unsigned int cache_physical_line_partitions = ((CPUInfo[1] >>= 12) & 0x3FF) + 1;
-		cache_ways_of_associativity = ((CPUInfo[1] >>= 10) & 0x3FF) + 1;
+		cache_ways_of_associativity = ((CPUInfo[1] >> 22) & 0x3FF) + 1;
 		
 	}
 	return cache_ways_of_associativity;
