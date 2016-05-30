@@ -1,0 +1,14 @@
+﻿Сборка начата 25.05.2016 15:42:44.
+     1>Проект "C:\Users\София\Documents\Visual Studio 2013\Projects\RGZ_UprRes\lib_DLL\lib_DLL.vcxproj" в узле 2 (целевые объекты Build).
+     1>ClCompile:
+         C:\Program Files (x86)\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D LIB_DLL_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt dll.cpp
+         dll.cpp
+     1>c:\users\софия\documents\visual studio 2013\projects\rgz_uprres\lib_dll\dll.cpp(41): warning C4190: для "GetSize" задана С-компоновка, но возвращаемый тип UDT "std::basic_string<char,std::char_traits<char>,std::allocator<char>>" несовместим с языком Си
+       Link:
+         C:\Program Files (x86)\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\София\Documents\Visual Studio 2013\Projects\RGZ_UprRes\Debug\lib_DLL.dll" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\София\Documents\Visual Studio 2013\Projects\RGZ_UprRes\Debug\lib_DLL.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\София\Documents\Visual Studio 2013\Projects\RGZ_UprRes\Debug\lib_DLL.lib" /MACHINE:X86 /DLL Debug\dll.obj
+         lib_DLL.vcxproj -> C:\Users\София\Documents\Visual Studio 2013\Projects\RGZ_UprRes\Debug\lib_DLL.dll
+     1>Сборка проекта "C:\Users\София\Documents\Visual Studio 2013\Projects\RGZ_UprRes\lib_DLL\lib_DLL.vcxproj" завершена (целевые объекты Build).
+
+Сборка успешно завершена.
+
+Затраченное время: 00:00:03.01

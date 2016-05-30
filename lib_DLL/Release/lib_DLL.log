@@ -1,0 +1,8 @@
+﻿  dll.cpp
+dll.cpp(6): warning C4190: для "GetInformation" задана С-компоновка, но возвращаемый тип UDT "std::basic_string<char,std::char_traits<char>,std::allocator<char>>" несовместим с языком Си
+dll.cpp(58): warning C4190: для "GetCache" задана С-компоновка, но возвращаемый тип UDT "std::basic_string<char,std::char_traits<char>,std::allocator<char>>" несовместим с языком Си
+     Создается библиотека C:\Users\gener\Downloads\RGZ_UprRes\Release\lib_DLL.lib и объект C:\Users\gener\Downloads\RGZ_UprRes\Release\lib_DLL.exp
+  Создание кода
+  All 79 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Создание кода завершено
+  lib_DLL.vcxproj -> C:\Users\gener\Downloads\RGZ_UprRes\Release\lib_DLL.dll
