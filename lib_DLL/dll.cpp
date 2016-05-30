@@ -39,6 +39,7 @@ void GetCpuid(int CPUInfo[4], int InfoType)
 	_asm
 	{
 		MOV EAX, InfoType //установка функции команды CPUID
+		MOV ECX, 3
 			CPUID	//вызов инструкции процессора
 			//полученные в регистрах процессора 
 			//результаты CPUID копируются
@@ -54,7 +55,7 @@ void GetCpuid(int CPUInfo[4], int InfoType)
 	CPUInfo[3] = IEDX;
 }
 
-extern "C" _declspec(dllexport) string GetCache()
+extern "C" _declspec(dllexport) int GetCache()
 {
 	int CPUInfo[4]; // регистры EAX, EBX, ECX, EDX
 	char CPUBrandString[48];//имя процессора
@@ -67,6 +68,8 @@ extern "C" _declspec(dllexport) string GetCache()
 	memcpy(CPUBrandString + 16, CPUInfo, sizeof(CPUInfo));
 	GetCpuid(CPUInfo, 0x80000004);
 	memcpy(CPUBrandString + 32, CPUInfo, sizeof(CPUInfo));
+
+	unsigned int cache_ways_of_associativity;
 	if (strstr(CPUBrandString, "AMD"))//если AMD
 	{
 		unsigned int ByteEAX, ByteEBX;
@@ -86,54 +89,29 @@ extern "C" _declspec(dllexport) string GetCache()
 	{
 		unsigned int Byte;
 		//0x02-содержит информацию о Cache 
-		GetCpuid(CPUInfo, 0x02);
+		GetCpuid(CPUInfo, 0x04);
 		int IsValid;
 		unsigned int bias;//сдвиг
-		//перебираем регистры EAX, EBX, ECX, EDX
-		for (int i = 0; i < 4; i++)
-		{
-			//старший бит каждого регистра содержит ли
-			//регистр достоверную информацию или зарезервирован
-			//если достоверная, то вернет 0
-			//зарезервирован, вернет 1
-			IsValid = (CPUInfo[i] & 0x80000000) >> 31;
-			//число, умножив на которое, получаем нужный байт
-			bias = i ? 0x000000FF : 0x0000FF00;
+		
+		int cache_type = CPUInfo[0] & 0x1F;
 
-			if (IsValid == 0)//достоверная информация
-			//перебираем байты в каждом регистре
-			//если EAX, первый байт всегда возвращает 01H, игнорируем его
-			//иначе просматриваем регистры с 1ого байта
-				for (int j = (!i ? 1 : 0); j < 4; j++)
-				{
-					//получаем нужный байт, множив его на число и сдвинув вконец
-					Byte = (CPUInfo[i] & bias) >> (8 * j);
-					//множитель для следующего байта
-					bias = bias << 8;
-					//ищем нужный и выдем размер буфера TLB
-					if (Byte == 0x22 || Byte == 0x46 || Byte == 0xD0 || Byte == 0xD1 || Byte == 0xD2)
-					{
-						Cache = "4-way set associative";
-					}
-					if (Byte == 0x23 || Byte == 0x25 || Byte == 0x29 || Byte == 0x47 || Byte == 0xD6 || Byte == 0xD7 || Byte == 0xD8)
-					{
-						Cache = "8-way set associative";
-					}
-					if (Byte == 0x4A || Byte == 0x4C || Byte == 0xDC || Byte == 0xDD || Byte == 0xDE)
-					{
-						Cache = "12-way set associative";
-					}
-					if (Byte == 0x49 || Byte == 0x4B || Byte == 0x4D || Byte == 0xE2 || Byte == 0xE3 || Byte == 0xE4)
-					{
-						Cache = "16-way set associative";
-					}
-					if (Byte == 0xEA || Byte == 0xEB || Byte == 0xEC)
-					{
-						Cache = "24-way set associative";
-					}
-			}
+		char * cache_type_string;
+		switch (cache_type) {
+		case 1: cache_type_string = "Кэш данных"; break;
+		case 2: cache_type_string = "Кэш инструкций"; break;
+		case 3: cache_type_string = "Универсальный кэш"; break;
+		default: cache_type_string = "Неопределен"; break;
 		}
+
+		int cache_level = (CPUInfo[0] >>= 5) & 0x7;
+		int cache_is_self_initializing = (CPUInfo[0] >>= 3) & 0x1;
+		int cache_is_fully_associative = (CPUInfo[0] >>= 1) & 0x1;
+		unsigned int cache_sets = CPUInfo[2] + 1;
+		unsigned int cache_coherency_line_size = (CPUInfo[1] & 0xFFF) + 1;
+		unsigned int cache_physical_line_partitions = ((CPUInfo[1] >>= 12) & 0x3FF) + 1;
+		cache_ways_of_associativity = ((CPUInfo[1] >>= 10) & 0x3FF) + 1;
+		
 	}
-	return Cache;
+	return cache_ways_of_associativity;
 
 }

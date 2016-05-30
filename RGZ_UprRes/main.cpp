@@ -144,15 +144,15 @@ DWORD WINAPI ThreadFunc(void*)
 		typedef std::string(*GetKeyboard)();//тип указателя на функцию
 		GetKeyboard DLLInfo = (GetKeyboard)GetProcAddress(hLib, "GetInformation");
 
-		typedef std::string(*GetCacheAssociative)();
+		typedef int(*GetCacheAssociative)();
 		GetCacheAssociative CacheAssociative = (GetCacheAssociative)GetProcAddress(hLib, "GetCache");
 
 		std::string KeyboarType = DLLInfo();
-		std::string Size = CacheAssociative();
+		int Cache = CacheAssociative();
 
 		sprintf_s(str, "Выполнил студент группы ПМИ-31 Савицкий Ю.Р.\n");
 		sprintf_s(info, "Тип клавиатуры: %s\n", KeyboarType);
-		sprintf_s(info_1, "Размер страницы буфера ассоциативной трансляции команд: %s",Size.c_str());
+		sprintf_s(info_1, "Размер страницы буфера ассоциативной трансляции команд: %d", Cache);
 		FreeLibrary(hLib);
 		return 0;
 	}
