@@ -1,20 +1,8 @@
-﻿Сборка начата 30.05.2016 20:49:41.
-     1>Проект "D:\git\UpRezRGZ\RGZ_UprRes\RGZ_UprRes.vcxproj" в узле 2 (целевые объекты Rebuild).
-     1>ClCompile:
-         D:\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Release\\" /Fd"Release\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
-         main.cpp
-     1>main.cpp(28): warning C4244: =: преобразование "double" в "LONG", возможна потеря данных
-     1>main.cpp(66): warning C4302: приведение типов: усечение из "LPSTR" в "WORD"
-     1>main.cpp(71): warning C4302: приведение типов: усечение из "LPSTR" в "WORD"
-     1>main.cpp(154): warning C4477: 'sprintf_s' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'std::string'
-       Link:
-         D:\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\git\UpRezRGZ\Release\RGZ_UprRes.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"D:\git\UpRezRGZ\Release\RGZ_UprRes.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG:incremental /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\git\UpRezRGZ\Release\RGZ_UprRes.lib" /MACHINE:X86 /SAFESEH Release\main.obj
-         Создание кода
-         All 48 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
-         Создание кода завершено
-         RGZ_UprRes.vcxproj -> D:\git\UpRezRGZ\Release\RGZ_UprRes.exe
-     1>Сборка проекта "D:\git\UpRezRGZ\RGZ_UprRes\RGZ_UprRes.vcxproj" завершена (целевые объекты Rebuild).
-
-Сборка успешно завершена.
-
-Затраченное время: 00:00:00.98
+﻿  main.cpp
+main.cpp(28): warning C4244: =: преобразование "double" в "LONG", возможна потеря данных
+main.cpp(68): warning C4302: приведение типов: усечение из "LPSTR" в "WORD"
+main.cpp(73): warning C4302: приведение типов: усечение из "LPSTR" в "WORD"
+  Создание кода
+  All 9 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Создание кода завершено
+  RGZ_UprRes.vcxproj -> C:\git\UpRezRGZ\Release\RGZ_UprRes.exe

@@ -9,7 +9,7 @@ static TCHAR szWindowClass[] = _T("win32app");
 static TCHAR szTitle[] = _T("РГЗ по Управлению ресурсами в вычислительных системах.");
 HINSTANCE hInst;
 HWND hWindow;
-char info[256], info_1[256], str[256];
+char info[256], info_1[256], str[256], brandInfo[256];
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	PAINTSTRUCT ps;
@@ -39,7 +39,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		//вывод текста
 		TextOut(hdc, 5, 5, str, _tcslen(str));
 		TextOut(hdc, 5, 30, info, _tcslen(info));
-		TextOut(hdc, 5, 60, info_1, _tcslen(info_1));
+		TextOut(hdc, 5, 60, brandInfo, _tcslen(brandInfo));
+		TextOut(hdc, 5, 90, info_1, _tcslen(info_1));
+		
 		DeleteObject(hFont); //выгрузим из памяти объект шрифта
 		EndPaint(hWnd, &ps);
 		break;
@@ -65,7 +67,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	wcex.hInstance = hInstance;//класс окна
 	wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_APPLICATION));//пиктограмма
 	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);//курсор окна
-	wcex.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(0, 128, 256));//цвет фона
+	wcex.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(255, 255, 128));//цвет фона
 	wcex.lpszMenuName = NULL;//меню в окне не предусмотрено
 	wcex.lpszClassName = szWindowClass;//название класса окна приложения
 	wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_APPLICATION));
@@ -80,7 +82,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	// szTitle: текст, отображаемый в строке заголовка
 	//WS_VISIBLE | WS_SYSMENU | WS_MINIMIZEBOX: тип окна для создания
 	// CW_USEDEFAULT, CW_USEDEFAULT: начальное положение (x, y)
-	// 800, 200: начальный размер (ширина, длина)
+	// 450, 200: начальный размер (ширина, длина)
 	// NULL:родительское окно
 	// NULL: наличие меню
 	// hInstance: первый параметр WinMain	
@@ -89,7 +91,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		szTitle,
 		WS_VISIBLE | WS_SYSMENU | WS_MINIMIZEBOX,
 		CW_USEDEFAULT, CW_USEDEFAULT,
-		850, 200,
+		450, 200,
 		NULL,
 		NULL,
 		hInstance,
@@ -137,25 +139,33 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 DWORD WINAPI ThreadFunc(void*)
 {
 
-	HINSTANCE hLib = LoadLibrary(TEXT("lib_DLL.dll"));
+	HINSTANCE hLib = LoadLibrary(TEXT("lib.dll"));
 	if (hLib)
 	{
 
-		typedef std::string(*GetKeyboard)();//тип указателя на функцию
-		GetKeyboard DLLInfo = (GetKeyboard)GetProcAddress(hLib, "GetInformation");
+		typedef char*(*GetKeyboard)();//тип указателя на функцию
+		GetKeyboard KeyboardType= (GetKeyboard)GetProcAddress(hLib, "GetInformation");
 
-		typedef int(*GetCacheAssociative)();
+		typedef char*(*GetCacheAssociative)(int*);
 		GetCacheAssociative CacheAssociative = (GetCacheAssociative)GetProcAddress(hLib, "GetCache");
 
-		std::string KeyboarType = DLLInfo();
-		int Cache = CacheAssociative();
+		char* keyboarType = KeyboardType();
+		int Cache=0;
+		
+		char* Brand = CacheAssociative(&Cache);
 
 		sprintf_s(str, "Выполнил студент группы ПМИ-31 Савицкий Ю.Р.\n");
-		sprintf_s(info, "Тип клавиатуры: %s\n", KeyboarType);
-		if(Cache!=1)
-		sprintf_s(info_1, "Ассоциативность КЭШа третьего уровня: %d", Cache);
+		sprintf_s(info, "Тип клавиатуры: %s\n", keyboarType);
+		sprintf_s(brandInfo, "Марка процессора: %s\n", Brand);
+
+		if (Cache > 1)
+			sprintf_s(info_1, "Ассоциативность L3 КЭШа: %d-way associative", Cache);
 		else
-			sprintf_s(info_1, "Ассоциативность КЭШа третьего уровня определить нельзя");
+			if(Cache==-1)
+				sprintf_s(info_1, "L3 КЭШ полностью ассоциативен");
+			else
+			sprintf_s(info_1, "Невозможо определить ассоциативность L3 КЭШа");
+		
 
 		FreeLibrary(hLib);
 		return 0;
