@@ -1,7 +1,18 @@
-﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Release\) contains files shared from another project (lib_DLL.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  dll.cpp
-     Создается библиотека C:\git\UpRezRGZ\Release\lib.lib и объект C:\git\UpRezRGZ\Release\lib.exp
-  Создание кода
-  All 3 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
-  Создание кода завершено
-  lib_DLL.vcxproj -> C:\git\UpRezRGZ\Release\lib.dll
+﻿Сборка начата 05.06.2016 19:52:15.
+     1>Проект "D:\git\UpRezRGZ\lib_DLL\lib_DLL.vcxproj" в узле 3 (целевые объекты Rebuild).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Release\) contains files shared from another project (lib_DLL.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>ClCompile:
+         D:\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D LIB_DLL_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Release\\" /Fd"Release\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt dll.cpp
+         dll.cpp
+       Link:
+         D:\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\git\UpRezRGZ\Release\lib.dll" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"D:\git\UpRezRGZ\Release\lib.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG:incremental /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\git\UpRezRGZ\Release\lib.lib" /MACHINE:X86 /SAFESEH /DLL Release\dll.obj
+            Создается библиотека D:\git\UpRezRGZ\Release\lib.lib и объект D:\git\UpRezRGZ\Release\lib.exp
+         Создание кода
+         All 3 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+         Создание кода завершено
+         lib_DLL.vcxproj -> D:\git\UpRezRGZ\Release\lib.dll
+     1>Сборка проекта "D:\git\UpRezRGZ\lib_DLL\lib_DLL.vcxproj" завершена (целевые объекты Rebuild).
+
+Сборка успешно завершена.
+
+Затраченное время: 00:00:01.26

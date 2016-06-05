@@ -10,6 +10,48 @@ static TCHAR szTitle[] = _T("РГЗ по Управлению ресурсами в вычислительных систем
 HINSTANCE hInst;
 HWND hWindow;
 char info[256], info_1[256], str[256], brandInfo[256];
+
+DWORD WINAPI ThreadFunc(void*)
+{
+
+	HINSTANCE hLib = LoadLibrary(TEXT("lib.dll"));
+	if (hLib)
+	{
+
+		typedef char*(*GetKeyboard)();//тип указателя на функцию
+		GetKeyboard KeyboardType = (GetKeyboard)GetProcAddress(hLib, "GetInformation");
+
+		typedef char*(*GetCacheAssociative)(int*);
+		GetCacheAssociative CacheAssociative = (GetCacheAssociative)GetProcAddress(hLib, "GetCache");
+
+		char* keyboarType = KeyboardType();
+		int Cache = 0;
+
+		char* Brand = CacheAssociative(&Cache);
+
+		sprintf_s(str, "Выполнил студент группы ПМИ-31 Савицкий Ю.Р.\n");
+		sprintf_s(info, "Тип клавиатуры: %s\n", keyboarType);
+		sprintf_s(brandInfo, "Марка процессора: %s\n", Brand);
+
+		if (Cache > 1)
+			sprintf_s(info_1, "Ассоциативность L3 КЭШа: %d-way associative", Cache);
+		else
+			if (Cache == -1)
+				sprintf_s(info_1, "L3 КЭШ полностью ассоциативен");
+			else
+				sprintf_s(info_1, "Невозможо определить ассоциативность L3 КЭШа");
+
+
+		FreeLibrary(hLib);
+		return 0;
+	}
+	else
+	{
+		MessageBox(hWindow, _T("Dll was not loaded!"), _T("Error!"), MB_OK);
+		return 1;
+	}
+}
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	PAINTSTRUCT ps;
@@ -136,43 +178,3 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	return (int)msg.wParam;
 }
 
-DWORD WINAPI ThreadFunc(void*)
-{
-
-	HINSTANCE hLib = LoadLibrary(TEXT("lib.dll"));
-	if (hLib)
-	{
-
-		typedef char*(*GetKeyboard)();//тип указателя на функцию
-		GetKeyboard KeyboardType= (GetKeyboard)GetProcAddress(hLib, "GetInformation");
-
-		typedef char*(*GetCacheAssociative)(int*);
-		GetCacheAssociative CacheAssociative = (GetCacheAssociative)GetProcAddress(hLib, "GetCache");
-
-		char* keyboarType = KeyboardType();
-		int Cache=0;
-		
-		char* Brand = CacheAssociative(&Cache);
-
-		sprintf_s(str, "Выполнил студент группы ПМИ-31 Савицкий Ю.Р.\n");
-		sprintf_s(info, "Тип клавиатуры: %s\n", keyboarType);
-		sprintf_s(brandInfo, "Марка процессора: %s\n", Brand);
-
-		if (Cache > 1)
-			sprintf_s(info_1, "Ассоциативность L3 КЭШа: %d-way associative", Cache);
-		else
-			if(Cache==-1)
-				sprintf_s(info_1, "L3 КЭШ полностью ассоциативен");
-			else
-			sprintf_s(info_1, "Невозможо определить ассоциативность L3 КЭШа");
-		
-
-		FreeLibrary(hLib);
-		return 0;
-	}
-	else
-	{
-		MessageBox(hWindow, _T("Dll was not loaded!"), _T("Error!"), MB_OK);
-		return 1;
-	}
-}
